@@ -30,24 +30,24 @@ function unregisterShortcuts (state) {
   }
 }
 
-module.exports = function ShortE (globalShortcut, leader, opts = {}) {
+module.exports = function ShortE (globalShortcut, leaderShortcut, opts = {}) {
   assert(validate.isObject(globalShortcut), 'malformed globalShortcut object')
   assert(validate.isFunction(globalShortcut.register), 'malformed globalShortcut object')
   assert(validate.isFunction(globalShortcut.unregister), 'malformed globalShortcut object')
-  assert(validate.isString(leader) || validate.isInteger(leader), 'invalid leader key')
+  assert(validate.isString(leaderShortcut) || validate.isInteger(leaderShortcut), 'invalid leader key')
   const debounceTime = opts.debounceTime || 0
   const cancelShortcut = opts.cancelShortcut || 'Esc'
   assert(validate.isInteger(debounceTime), 'debounceTime must be an integer')
   assert(validate.isString(cancelShortcut) || validate.isInteger(cancelShortcut), 'invalid cancelShortcut')
   let state = {
     globalShortcut,
-    leader,
+    leaderShortcut,
     debounceTime,
     shortcuts: {},
     timer: null,
     active: false
   }
-  globalShortcut.register(leader, () => registerShortcuts(state))
+  globalShortcut.register(leaderShortcut, () => registerShortcuts(state))
   globalShortcut.register(cancelShortcut, () => {
     clearTimeout(state.timer)
     unregisterShortcuts(state)
@@ -64,9 +64,9 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
       state.shortcuts[shortcut] = cb
     },
     leader: function (newLeader) {
-      globalShortcut.unregister(leader)
+      globalShortcut.unregister(state.leaderShortcut)
       globalShortcut.register(newLeader, () => registerShortcuts(state))
-      state.leader = newLeader
+      state.leaderShortcut = newLeader
     },
     debounceTimer: function (newTime) {
       state.debounceTime = newTime
