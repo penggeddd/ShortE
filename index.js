@@ -1,5 +1,7 @@
 'use strict'
 
+const assert = require('assert')
+const validate = require('validate.js')
 const EventEmitter = require('events')
 
 function debounce (state, cb, debounceTime) {
@@ -28,7 +30,15 @@ function unregisterShortcuts (state) {
   }
 }
 
-module.exports = function ShortE (globalShortcut, leader, debounceTime, cancelShortcut = 'Esc') {
+module.exports = function ShortE (globalShortcut, leader, opts = {}) {
+  assert(validate.isObject(globalShortcut), 'malformed globalShortcut object')
+  assert(validate.isFunction(globalShortcut.register), 'malformed globalShortcut object')
+  assert(validate.isFunction(globalShortcut.unregister), 'malformed globalShortcut object')
+  assert(validate.isString(leader) || validate.isInteger(leader), 'invalid leader key')
+  const debounceTime = opts.debounceTime || 0
+  const cancelShortcut = opts.cancelShortcut || 'Esc'
+  assert(validate.isInteger(debounceTime), 'debounceTime must be an integer')
+  assert(validate.isString(cancelShortcut) || validate.isInteger(cancelShortcut), 'invalid cancelShortcut')
   let state = {
     globalShortcut,
     leader,
