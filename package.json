@@ -19,5 +19,8 @@
     "sinon": "^1.17.6",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "validate.js": "^0.11.1"
   }
 }
