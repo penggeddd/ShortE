@@ -1,16 +1,31 @@
 'use strict'
 const test = require('tape')
 const sinon = require('sinon')
+const proxyquire = require('proxyquire')
 
 const ShortE = require('../../')
 
+function stubShortE (registerShortcuts, unregisterShortcuts) {
+  return proxyquire('../../', {
+    './lib/registrators': {
+      registerShortcuts, unregisterShortcuts
+    }
+  })
+}
+
 test('setting leader changes leader in state, unregisters old leader and registers new', t => {
-  t.plan(3)
-  const globalShortcut = {register: sinon.spy(), unregister: sinon.spy()}
+  t.plan(4)
+  const register = sinon.stub()
+  register.withArgs('Ctrl+B').callsArg(1)
+  const globalShortcut = {register, unregister: sinon.spy()}
+  const registerShortcuts = sinon.spy()
+  const unregisterShortcuts = sinon.spy()
+  const ShortE = stubShortE(registerShortcuts, unregisterShortcuts)
   const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500})
   shortcuts.leader = 'Ctrl+B'
   t.ok(globalShortcut.unregister.calledWith('Ctrl+A'), 'old leader unregistered')
   t.ok(globalShortcut.register.calledWith('Ctrl+B'), 'new leader registered')
+  t.ok(registerShortcuts.calledOnce, 'calling new leader registers shortcuts')
   t.equal(shortcuts.leader, 'Ctrl+B', 'new leaderShortcut placed in state')
 })
 
@@ -31,13 +46,19 @@ test('setting leader - bad parameters', t => {
 })
 
 test('setting cancel changes cancel in state, unregisters old cancel and registers new', t => {
-  t.plan(3)
-  const globalShortcut = {register: sinon.spy(), unregister: sinon.spy()}
-  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+C'})
+  t.plan(4)
+  const register = sinon.stub()
+  register.withArgs('Ctrl+B').callsArg(1)
+  const globalShortcut = {register, unregister: sinon.spy()}
+  const registerShortcuts = sinon.spy()
+  const unregisterShortcuts = sinon.spy()
+  const ShortE = stubShortE(registerShortcuts, unregisterShortcuts)
+  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancel: 0})
   shortcuts.cancel = 'Ctrl+B'
-  t.ok(globalShortcut.unregister.calledWith('Ctrl+C'), 'old cancel unregistered')
-  t.ok(globalShortcut.register.calledWith('Ctrl+B'), 'new cancel registered')
-  t.equal(shortcuts.cancel, 'Ctrl+B', 'new cancel shortcut placed in state')
+  t.ok(globalShortcut.unregister.calledWith(0), 'old leader unregistered')
+  t.ok(globalShortcut.register.calledWith('Ctrl+B'), 'new leader registered')
+  t.ok(registerShortcuts.calledOnce, 'calling new leader registers shortcuts')
+  t.equal(shortcuts.cancel, 'Ctrl+B', 'new leaderShortcut placed in state')
 })
 
 test('setting cancel - bad parameters', t => {

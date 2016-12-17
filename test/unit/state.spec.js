@@ -8,9 +8,10 @@ const ShortE = require('../../')
 
 test('default state', t => {
   const globalShortcut = {register: sinon.spy(), unregister: () => {}}
-  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500})
+  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A')
   t.ok(globalShortcut.register.calledWith('Ctrl+A'), 'leader key registered')
   t.ok(globalShortcut.register.calledWith('Esc'), 'default cancel key registered')
+  t.equal(shortcuts.debounceTime, 0, 'default debounceTime is 0')
   Object.keys(EventEmitter.prototype).forEach(k => {
     if (typeof EventEmitter.prototype[k] === 'function') {
       t.equals(shortcuts[k], EventEmitter.prototype[k], `${k} EventEmitter method exported`)
