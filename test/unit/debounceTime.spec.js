@@ -2,7 +2,7 @@
 const test = require('tape')
 const sinon = require('sinon')
 
-const ShortE = require('../')
+const ShortE = require('../../')
 
 test('can get and set debounceTime in state', t => {
   t.plan(2)

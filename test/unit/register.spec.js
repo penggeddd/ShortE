@@ -2,7 +2,7 @@
 const test = require('tape')
 const sinon = require('sinon')
 
-const ShortE = require('../')
+const ShortE = require('../../')
 
 test('register adds cb to shortcut', t => {
   t.plan(2)

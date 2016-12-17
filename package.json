@@ -4,7 +4,8 @@
   "description": "Shortcut mode toggler for Electron",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape ./test/*.spec.js --tap | tap-spec"
+    "test": "standard && tape ./test/**/*.spec.js --tap | tap-spec",
+    "coverage": "nyc --reporter text --reporter lcov npm test"
   },
   "keywords": [
     "electron",

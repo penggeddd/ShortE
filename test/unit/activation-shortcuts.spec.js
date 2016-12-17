@@ -2,7 +2,7 @@
 const test = require('tape')
 const sinon = require('sinon')
 
-const ShortE = require('../')
+const ShortE = require('../../')
 
 test('setting leader changes leader in state, unregisters old leader and registers new', t => {
   t.plan(3)

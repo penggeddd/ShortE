@@ -4,7 +4,7 @@ const test = require('tape')
 const sinon = require('sinon')
 const EventEmitter = require('events')
 
-const ShortE = require('../')
+const ShortE = require('../../')
 
 test('default state', t => {
   const globalShortcut = {register: sinon.spy(), unregister: () => {}}
