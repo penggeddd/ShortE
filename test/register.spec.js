@@ -26,3 +26,31 @@ test('registering same shortcut overrides shortcut in state', t => {
   shortcuts.register('a', cb2)
   t.deepEqual(shortcuts.shortcuts.a, cb2, 'shortcut overriden in state')
 })
+
+test('register - bad params', t => {
+  t.plan(2)
+  const globalShortcut = {register: sinon.spy(), unregister: () => {}}
+  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500})
+  const cb1 = function cb1 () {}
+  t.throws(
+    () => shortcuts.register({}, cb1),
+    /invalid shortcut key/,
+    'cannot register object as shortcut key'
+  )
+  t.throws(
+    () => shortcuts.register('a', {}),
+    /invalid callback function/,
+    'cannot register object as shortcut key'
+  )
+})
+
+test('cannot modify shortcuts directly in state', t => {
+  t.plan(1)
+  const globalShortcut = {register: sinon.spy(), unregister: () => {}}
+  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500})
+  const cb1 = function cb1 () {}
+  const cb2 = function cb2 () {}
+  shortcuts.register('a', cb1)
+  shortcuts.shortcuts.a = cb2
+  t.deepEqual(shortcuts.shortcuts.a, cb1, 'shortcut unmodified')
+})
