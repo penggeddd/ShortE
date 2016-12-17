@@ -17,6 +17,7 @@
   "author": "Aram Drevekenin <grimsniffer@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "proxyquire": "^1.7.10",
     "sinon": "^1.17.6",
     "standard": "^8.6.0",
     "tap-spec": "^4.1.1",
