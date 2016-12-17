@@ -10,9 +10,9 @@ function debounce (state, cb, debounceTime) {
   state.timer = setTimeout(() => unregisterShortcuts(state), debounceTime)
 }
 
-function registerShortcuts (state) {
+function registerShortcuts (state, emitter) {
   if (!state.active) {
-    state.emit('active')
+    emitter.emit('active')
     state.active = true
     Object.keys(state.shortcuts).forEach(keyCombo => {
       state.globalShortcut.register(`${keyCombo}`, () => debounce(state, state.shortcuts[keyCombo], state.debounceTime))
@@ -20,9 +20,9 @@ function registerShortcuts (state) {
   }
 }
 
-function unregisterShortcuts (state) {
+function unregisterShortcuts (state, emitter) {
   if (state.active) {
-    state.emit('inactive')
+    emitter.emit('inactive')
     state.active = false
     Object.keys(state.shortcuts).forEach(keyCombo => {
       state.globalShortcut.unregister(keyCombo)
@@ -49,11 +49,6 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
     timer: null,
     active: false
   }
-  globalShortcut.register(leader, () => registerShortcuts(state))
-  globalShortcut.register(cancel, () => {
-    clearTimeout(state.timer)
-    unregisterShortcuts(state)
-  })
   const emitter = new EventEmitter()
   const emitterMethods = Object.keys(EventEmitter.prototype).reduce((methods, key) => {
     if (typeof EventEmitter.prototype[key] === 'function') {
@@ -75,6 +70,11 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
       state.shortcuts[shortcut] = cb
     }
   })
+  globalShortcut.register(leader, () => registerShortcuts(state, emitter))
+  globalShortcut.register(cancel, () => {
+    clearTimeout(state.timer)
+    unregisterShortcuts(state, emitter)
+  })
   return Object.defineProperties(methods, {
     leader: {
       get: () => state.leader,
@@ -82,7 +82,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
         assert(validate.isString(val) || validate.isInteger(val), 'invalid leader key')
         assert(val !== state.cancel, 'leader and cancel shortcuts cannot be identical')
         globalShortcut.unregister(state.leader)
-        globalShortcut.register(val, () => registerShortcuts(state))
+        globalShortcut.register(val, () => registerShortcuts(state, emitter))
         state.leader = val
       }
     },
@@ -92,7 +92,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
         assert(validate.isString(val) || validate.isInteger(val), 'invalid cancel shortcut')
         assert(val !== state.leader, 'leader and cancel shortcuts cannot be identical')
         globalShortcut.unregister(state.cancel)
-        globalShortcut.register(val, () => registerShortcuts(state))
+        globalShortcut.register(val, () => registerShortcuts(state, emitter))
         state.cancel = val
       }
     },
@@ -105,6 +105,9 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
     },
     shortcuts: {
       get: () => Object.assign({}, state.shortcuts)
+    },
+    active: {
+      get: () => state.active
     }
   })
 }
