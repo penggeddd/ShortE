@@ -3,32 +3,7 @@
 const assert = require('assert')
 const validate = require('validate.js')
 const EventEmitter = require('events')
-
-function debounce (state, cb, debounceTime) {
-  cb()
-  clearTimeout(state.timer)
-  state.timer = setTimeout(() => unregisterShortcuts(state), debounceTime)
-}
-
-function registerShortcuts (state, emitter) {
-  if (!state.active) {
-    emitter.emit('active')
-    state.active = true
-    Object.keys(state.shortcuts).forEach(keyCombo => {
-      state.globalShortcut.register(`${keyCombo}`, () => debounce(state, state.shortcuts[keyCombo], state.debounceTime))
-    })
-  }
-}
-
-function unregisterShortcuts (state, emitter) {
-  if (state.active) {
-    emitter.emit('inactive')
-    state.active = false
-    Object.keys(state.shortcuts).forEach(keyCombo => {
-      state.globalShortcut.unregister(keyCombo)
-    })
-  }
-}
+const { registerShortcuts, unregisterShortcuts } = require('./lib/registrators')
 
 module.exports = function ShortE (globalShortcut, leader, opts = {}) {
   assert(validate.isObject(globalShortcut), 'malformed globalShortcut object')
