@@ -4,8 +4,8 @@ Keyboard shortcut modes for Electron
 ## Description
 This allows you to designate a 'leader' key, that enters the user into a different 'mode'.
 Upon entering the new mode:
-* One or more of your pre-defined shortcuts are registered.
-* When using one of those shortcuts, a timer starts, at the end of which the user will return to the previous mode.
+* Your pre-defined shortcuts are registered and available to the user.
+* When using one of those shortcuts, a debouncing timer starts, at the end of which the user will return to the previous mode.
 * The user can press the 'cancel' shortcut to return to the previous mode.
 
 ## Installation
