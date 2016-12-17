@@ -21,7 +21,7 @@ test('default state', t => {
 
 test('custom cancel key', t => {
   const globalShortcut = {register: sinon.spy(), unregister: () => {}}
-  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancelShortcut: 'Ctrl+B'})
+  const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'})
   t.ok(globalShortcut.register.calledWith('Ctrl+A'), 'leader key registered')
   t.ok(globalShortcut.register.calledWith('Ctrl+B'), 'custom cancel key registered')
   Object.keys(EventEmitter.prototype).forEach(k => {
@@ -36,22 +36,22 @@ test('bad params', t => {
   t.plan(4)
   const globalShortcut = {register: () => {}, unregister: () => {}}
   t.throws(
-    () => new ShortE({register: () => {}}, 'Ctrl+A', {debounceTime: 500, cancelShortcut: 'Ctrl+B'}),
+    () => new ShortE({register: () => {}}, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'}),
     /malformed globalShortcut object/,
     'cannot create instance when providing globalShortcut with no unregister method'
   )
   t.throws(
-    () => new ShortE({unregister: () => {}}, 'Ctrl+A', {debounceTime: 500, cancelShortcut: 'Ctrl+B'}),
+    () => new ShortE({unregister: () => {}}, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'}),
     /malformed globalShortcut object/,
     'cannot create instance when providing globalShortcut with no unregister method'
   )
   t.throws(
-    () => new ShortE(null, 'Ctrl+A', {debounceTime: 500, cancelShortcut: 'Ctrl+B'}),
+    () => new ShortE(null, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'}),
     /malformed globalShortcut object/,
     'cannot create instance when providing globalShortcut with no unregister method'
   )
   t.throws(
-    () => new ShortE(globalShortcut, null, {debounceTime: 500, cancelShortcut: 'Ctrl+B'}),
+    () => new ShortE(globalShortcut, null, {debounceTime: 500, cancel: 'Ctrl+B'}),
     /invalid leader key/,
     'cannot create instance without providing leader key'
   )
