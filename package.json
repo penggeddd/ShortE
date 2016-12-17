@@ -7,6 +7,10 @@
     "test": "standard && tape ./test/**/*.spec.js --tap | tap-spec",
     "coverage": "nyc --reporter text --reporter lcov npm test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imsnif/ShortE.git"
+  },
   "keywords": [
     "electron",
     "shortcut",
