@@ -19,12 +19,12 @@ test('setting leader - bad parameters', t => {
   const globalShortcut = {register: sinon.spy(), unregister: sinon.spy()}
   const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'})
   t.throws(
-    () => shortcuts.leader = {},
+    () => { shortcuts.leader = {} },
     /invalid leader key/,
     'cannot set leader key to object'
   )
   t.throws(
-    () => shortcuts.leader = 'Ctrl+B',
+    () => { shortcuts.leader = 'Ctrl+B' },
     /leader and cancel shortcuts cannot be identical/,
     'cannot set leader key to cancel button shortcut'
   )
@@ -45,12 +45,12 @@ test('setting cancel - bad parameters', t => {
   const globalShortcut = {register: sinon.spy(), unregister: sinon.spy()}
   const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500, cancel: 'Ctrl+B'})
   t.throws(
-    () => shortcuts.cancel = {},
+    () => { shortcuts.cancel = {} },
     /invalid cancel shortcut/,
     'cannot set cancel key to object'
   )
   t.throws(
-    () => shortcuts.cancel = 'Ctrl+A',
+    () => { shortcuts.cancel = 'Ctrl+A' },
     /leader and cancel shortcuts cannot be identical/,
     'cannot set cancel key to leader button shortcut'
   )

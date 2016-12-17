@@ -18,12 +18,12 @@ test('debounceTime - bad parameters', t => {
   const globalShortcut = {register: sinon.spy(), unregister: sinon.spy()}
   const shortcuts = new ShortE(globalShortcut, 'Ctrl+A', {debounceTime: 500})
   t.throws(
-    () => shortcuts.debounceTime = 'a',
+    () => { shortcuts.debounceTime = 'a' },
     /debounceTime must be an integer/,
     'cannot set debounce time to string'
   )
   t.throws(
-    () => shortcuts.debounceTime = 1.5,
+    () => { shortcuts.debounceTime = 1.5 },
     /debounceTime must be an integer/,
     'cannot set debounce time to fraction'
   )
