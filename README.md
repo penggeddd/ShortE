@@ -1,5 +1,8 @@
 # ShortE
 Keyboard shortcut modes for Electron
+[![Build Status](https://travis-ci.org/imsnif/ShortE.svg?branch=master)](https://travis-ci.org/imsnif/ShortE)
+[![Coverage Status](https://coveralls.io/repos/github/imsnif/ShortE/badge.svg?branch=master)](https://coveralls.io/github/imsnif/ShortE?branch=master)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ## Description
 This allows you to designate a 'leader' key, that enters the user into a different 'mode'.
