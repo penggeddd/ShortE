@@ -63,6 +63,15 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
   }, {})
   const methods = Object.assign({}, emitterMethods, {
     register: function (shortcut, cb) {
+      assert(
+        validate.isString(shortcut) ||
+        validate.isInteger(shortcut),
+        'invalid shortcut key'
+      )
+      assert(
+        validate.isFunction(cb),
+        'invalid callback function'
+      )
       state.shortcuts[shortcut] = cb
     }
   })
@@ -95,8 +104,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
       }
     },
     shortcuts: {
-      get: () => state.shortcuts,
-      set: (val) => { throw new Error('use the register method to set shortcuts') }
+      get: () => Object.assign({}, state.shortcuts)
     }
   })
 }
