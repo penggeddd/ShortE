@@ -90,6 +90,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
     debounceTime: {
       get: () => state.debounceTime,
       set: (val) => {
+        assert(validate.isInteger(val), 'debounceTime must be an integer')
         state.debounceTime = val
       }
     },
