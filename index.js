@@ -36,7 +36,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
   assert(validate.isFunction(globalShortcut.unregister), 'malformed globalShortcut object')
   assert(validate.isString(leader) || validate.isInteger(leader), 'invalid leader key')
   const debounceTime = opts.debounceTime || 0
-  const cancel = opts.cancel || 'Esc'
+  const cancel = validate.isDefined(opts.cancel) ? opts.cancel : 'Esc'
   assert(cancel !== leader, 'leader and cancel shortcuts cannot be identical')
   assert(validate.isInteger(debounceTime), 'debounceTime must be an integer')
   assert(validate.isString(cancel) || validate.isInteger(cancel), 'invalid cancelShortcut')
@@ -70,7 +70,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
     leader: {
       get: () => state.leader,
       set: (val) => {
-        assert(validate.isString(leader) || validate.isInteger(leader), 'invalid leader key')
+        assert(validate.isString(val) || validate.isInteger(val), 'invalid leader key')
         assert(val !== state.cancel, 'leader and cancel shortcuts cannot be identical')
         globalShortcut.unregister(state.leader)
         globalShortcut.register(val, () => registerShortcuts(state))
@@ -80,7 +80,7 @@ module.exports = function ShortE (globalShortcut, leader, opts = {}) {
     cancel: {
       get: () => state.cancel,
       set: (val) => {
-        assert(validate.isString(cancel) || validate.isInteger(cancel), 'invalid cancelShortcut')
+        assert(validate.isString(val) || validate.isInteger(val), 'invalid cancel shortcut')
         assert(val !== state.leader, 'leader and cancel shortcuts cannot be identical')
         globalShortcut.unregister(state.cancel)
         globalShortcut.register(val, () => registerShortcuts(state))
