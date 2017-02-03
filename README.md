@@ -36,7 +36,7 @@ app.on('ready', () => {
   // Pressing: Ctrl+B + <indefinite wait> + W will print 'W was pressed'
   // Pressing: Ctrl+B + <indefinite wait> + Alt+B will print'Alt+B was pressed'
   // Pressing: 
-  // Ctrl+B + <indefinite wait> + W + <wait less than 0.5 seconds> + B 
+  // Ctrl+B + <indefinite wait> + W + <wait less than 0.5 seconds> + Alt+B 
   // will print 'W was pressed' and 'Alt+B was pressed'
 })
 ```
