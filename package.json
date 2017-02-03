@@ -1,6 +1,6 @@
 {
   "name": "shorte",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shortcut mode toggler for Electron",
   "main": "index.js",
   "scripts": {
